@@ -23,7 +23,12 @@ public:
 
     Lista(const Lista &lista) {
         //para copiar una lista tendremos que copiar todos los nodos de la lista original
-        this->inicio=copiarRecursivo(lista.inicio);
+        if (lista.get_inicio()!=nullptr)//solo podremos copiar siempre y cuando exista una lista
+            this->inicio=copiarRecursivo(lista.inicio);
+        else {
+            this->inicio = nullptr;//si nos dan una lista vacía, solo apuntamos a null en ambos
+            lista.fin=nullptr;
+        }
         this->numNodos = lista.numNodos;
     }
 
