@@ -58,6 +58,28 @@ public:
         this->numNodos++;
     }
 
+    void insertarOrdenado(const T dato,bool (*comp)(const T &obj1,
+        const T &obj2)) {
+        Nodo<T> *aux = this->inicio,*anterior=nullptr;
+
+        while (aux != nullptr) {
+            if (comp(dato,aux->get_dato())) break;
+            anterior = aux;
+            aux = aux->get_siguiente();
+        }
+        if (aux == nullptr) {
+            //caso en el que el nuevo nodo va a ser el ultimo nodo
+            insertarDatoFinal(dato);
+        }
+        else {
+            //caso en el que el nuevo nodo no se encuentra al final de la lista
+            Nodo<T> *nuevoNodo = new Nodo<T>(dato,nullptr);
+            nuevoNodo->set_siguiente(aux);
+            if (!anterior) this->inicio = nuevoNodo;
+            else anterior->set_siguiente(nuevoNodo);
+        }
+
+    }
 
 
 private:
