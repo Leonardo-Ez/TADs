@@ -5,6 +5,8 @@
 #ifndef TADS_BASE_LISTA_H
 #define TADS_BASE_LISTA_H
 
+#include <stdexcept>
+
 #include "Nodo.h"
 
 template <typename T>
@@ -13,7 +15,7 @@ class Lista {
     Nodo<T> *fin;
     int numNodos;
 public:
-    Lista() : inicio(nullptr), numNodos(0),fin(nullptr) {}
+    Lista() : inicio(nullptr),fin(nullptr),numNodos(0) {}
 
     ~Lista() {
         destruirRecursivo(this->inicio);
@@ -27,7 +29,7 @@ public:
             this->inicio=copiarRecursivo(lista.inicio);
         else {
             this->inicio = nullptr;//si nos dan una lista vacía, solo apuntamos a null en ambos
-            lista.fin=nullptr;
+            this->fin=nullptr;
         }
         this->numNodos = lista.numNodos;
     }
@@ -77,8 +79,37 @@ public:
             nuevoNodo->set_siguiente(aux);
             if (!anterior) this->inicio = nuevoNodo;
             else anterior->set_siguiente(nuevoNodo);
+            numNodos++;
         }
+    }
 
+    T extraerDatoEliminarNodo(const int pos) {
+        Nodo<T> *aux = this->inicio;//apuntamos al inicio de la lista
+        Nodo<T> *anterior = nullptr;//inicializamos un anterior en nullptr
+        int contador = 1;
+        while (aux != nullptr) {
+            if (pos == contador) break;//paramos cuando encontremos la posición que buscamos
+            anterior=aux;
+            aux = aux->get_siguiente();
+            contador++;
+        }
+        //en este punto, aux está apuntando al nodo que queremos eliminar o a nullptr
+        if (aux) {
+            //si aux no es nulo
+            if (anterior) anterior->set_siguiente(aux->get_siguiente());
+            else this->inicio = aux->get_siguiente();
+            if (aux==this->fin)this->fin=anterior;
+            //en este punto, el nodo ya se encuentra solo
+            //anulamos a dónde apunta el nodo por siacaso
+            aux->set_siguiente(nullptr);
+            this->numNodos--;
+            T dato = aux->get_dato();
+            delete aux;
+            return dato;
+        }
+        //si llega a este punto, significa que aux está al final y que hay menos datos que pos
+        throw std::out_of_range("posición fuera de rango");//se lanza una exepción, solo por ser un T
+        //como es genérico, no podemos retornar nada
     }
 
 

@@ -23,6 +23,9 @@ int main() {
     listaEnteros.insertarOrdenado(15,compararInt);
     listaEnteros.insertarOrdenado(20,compararInt);
     listaEnteros.insertarOrdenado(12,compararInt);
-
+    /*
+     * eliminar el nodo nro 2
+     */
+    listaEnteros.extraerDatoEliminarNodo(2);
     return 0;
 }
